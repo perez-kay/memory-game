@@ -1,34 +1,56 @@
+import { useState } from 'react';
+
+const data = [1, 2, 3, 4, 2, 3, 4, 5, 5, 6, 7, 8, 6, 7, 8, 1];
+
+const initialCards = data.map((num, i) => {
+  return {
+    id: i + 1,
+    number: num,
+  };
+});
+
 function App() {
   return (
     <div className="App">
-      <Board />
+      <h1>Memory Game</h1>
+      <p>Find all the matching pairs of numbers!</p>
+      <Score />
+      <Board cards={initialCards} />
     </div>
   );
 }
 
-const data = [
-  [1, 2, 3, 4],
-  [2, 3, 4, 5],
-  [5, 6, 7, 8],
-  [6, 7, 8, 1],
-];
-
-function Board() {
+function Board({ cards }) {
   return (
-    <>
-      <h1>Memory Game</h1>
-      <p>Find all the matching pairs of numbers!</p>
-      <ul className="board">
-        {data.map((row, i1) =>
-          row.map((el, i2) => <Card key={[i1, i2]} number={el} />)
-        )}
-      </ul>
-    </>
+    <ul className="board">
+      {cards.map((card) => (
+        <Card card={card} key={card.id} />
+      ))}
+    </ul>
   );
 }
 
-function Card({ number }) {
-  return <li className="card">{number}</li>;
+function Card({ card }) {
+  const [flipped, setFlipped] = useState(null);
+  return (
+    <li>
+      <button
+        className={`card ${flipped ? 'flipped' : ''}`}
+        onClick={() => setFlipped(card.id !== flipped ? card.id : null)}
+      >
+        {flipped && <p>{card.number}</p>}
+      </button>
+    </li>
+  );
+}
+
+function Score() {
+  return (
+    <div className="score">
+      <p>Score: X</p>
+      <p>Pairs left: X</p>
+    </div>
+  );
 }
 
 export default App;

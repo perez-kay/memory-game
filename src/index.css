@@ -14,6 +14,11 @@ h1 {
 .board {
   display: grid;
   grid-template-columns: auto auto auto auto;
+  margin-top: 0;
+}
+
+li {
+  list-style: none;
 }
 
 .card {
@@ -33,4 +38,13 @@ h1 {
 .card:hover {
   cursor: pointer;
   transform: scale(1.1);
+}
+
+.card.flipped {
+  background-color: #ffffff;
+}
+
+.score {
+  display: flex;
+  justify-content: space-between;
 }
