@@ -15,17 +15,10 @@ function App() {
   const [score, setScore] = useState(0);
 
   function handleFlip(flippedCard) {
-    // no cards flipped
     if (!flipped1 && !flipped2) {
       setFlipped1(flippedCard);
-      // card 1 flipped but you want to unflip it
-      // } else if (flipped1 && flipped1.id === flippedCard.id) {
-      //   setFlipped1(null);
     } else {
       if (!flipped2 && flippedCard.id !== flipped1.id) setFlipped2(flippedCard);
-      // } else if (flipped2 && flipped2.id === flippedCard.id) {
-      //   setFlipped2(null);
-      // }
     }
   }
 
@@ -42,13 +35,14 @@ function App() {
     <div className="App">
       <h1>Memory Game</h1>
       <p>Find all the matching pairs of numbers!</p>
+      <Score score={score} />
       <Board
         onFlip={handleFlip}
         flipped1={flipped1}
         flipped2={flipped2}
         cards={initialCards}
       />
-      <Score onSubmit={handleScore} score={score} />
+      <Submit onSubmit={handleScore} />
     </div>
   );
 }
@@ -70,12 +64,6 @@ function Board({ cards, onFlip, flipped1, flipped2 }) {
 }
 
 function Card({ card, onFlip, flipped1, flipped2 }) {
-  // const [flipped, setFlipped] = useState(null);
-
-  // function handleFlipped() {
-  //   setFlipped(card.id !== flipped ? card.id : null);
-  // }
-
   const isFlipped = flipped1?.id === card.id || flipped2?.id === card.id;
 
   return (
@@ -90,23 +78,16 @@ function Card({ card, onFlip, flipped1, flipped2 }) {
   );
 }
 
-function Score({ score, onSubmit }) {
-  // function handleScore() {
-  //   if (flippedCards.length === 2) {
-  //     if (flippedCards[0].number === flippedCards[1].number) {
-  //       setScore((s) => s + 1);
-  //     }
-  //   }
-  // }
-
+function Score({ score }) {
   return (
-    <>
-      <div className="score">
-        <p>Score: {score}</p>
-      </div>
-      <button onClick={onSubmit}>Submit</button>
-    </>
+    <div className="score">
+      <p>Score: {score}</p>
+    </div>
   );
+}
+
+function Submit({ onSubmit }) {
+  return <button onClick={onSubmit}>Submit</button>;
 }
 
 export default App;
