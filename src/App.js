@@ -1,6 +1,15 @@
 import { useState } from 'react';
 
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 const data = [1, 2, 3, 4, 2, 3, 4, 5, 5, 6, 7, 8, 6, 7, 8, 1];
+shuffle(data);
 
 const initialCards = data.map((num, i) => {
   return {
@@ -10,6 +19,7 @@ const initialCards = data.map((num, i) => {
 });
 
 function App() {
+  const [cards, setCards] = useState(initialCards);
   const [flipped1, setFlipped1] = useState(null);
   const [flipped2, setFlipped2] = useState(null);
   const [score, setScore] = useState(0);
@@ -41,6 +51,7 @@ function App() {
     setFlipped2(null);
     setScore(0);
     setFoundNums([]);
+    setCards(shuffle(initialCards));
   }
 
   return (
@@ -52,7 +63,7 @@ function App() {
         onFlip={handleFlip}
         flipped1={flipped1}
         flipped2={flipped2}
-        cards={initialCards}
+        cards={cards}
         foundNums={foundNums}
       />
       <Button onClick={handleScore}>Submit</Button>
