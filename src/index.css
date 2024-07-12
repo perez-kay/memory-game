@@ -48,3 +48,22 @@ li {
   display: flex;
   justify-content: space-between;
 }
+
+button {
+  background: #f8f8f8;
+  border: 2px solid gray;
+  border-radius: 10px;
+  color: rgb(63, 63, 63);
+  font-size: 12pt;
+  padding: 10px 15px;
+  font-weight: bold;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
+
+button:active {
+  transform: scale(0.98);
+}
