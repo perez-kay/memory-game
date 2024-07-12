@@ -13,6 +13,9 @@ function App() {
   const [flipped1, setFlipped1] = useState(null);
   const [flipped2, setFlipped2] = useState(null);
   const [score, setScore] = useState(0);
+  const [foundNums, setFoundNums] = useState([]);
+  const youWin = foundNums.length * 2 === data.length;
+  console.log(youWin);
 
   function handleFlip(flippedCard) {
     if (!flipped1 && !flipped2) {
@@ -26,28 +29,38 @@ function App() {
     if (flipped1 && flipped2) {
       if (flipped1.number === flipped2.number) {
         setScore((s) => s + 1);
+        setFoundNums((nums) => [...nums, flipped1.number]);
       }
       setFlipped1(null);
       setFlipped2(null);
     }
   }
+
+  function handleWin() {
+    setFlipped1(null);
+    setFlipped2(null);
+    setScore(0);
+    setFoundNums([]);
+  }
+
   return (
     <div className="App">
       <h1>Memory Game</h1>
       <p>Find all the matching pairs of numbers!</p>
-      <Score score={score} />
+      <Score score={score} youWin={youWin} onWin={handleWin} />
       <Board
         onFlip={handleFlip}
         flipped1={flipped1}
         flipped2={flipped2}
         cards={initialCards}
+        foundNums={foundNums}
       />
-      <Submit onSubmit={handleScore} />
+      <Button onClick={handleScore}>Submit</Button>
     </div>
   );
 }
 
-function Board({ cards, onFlip, flipped1, flipped2 }) {
+function Board({ cards, onFlip, flipped1, flipped2, foundNums }) {
   return (
     <ul className="board">
       {cards.map((card) => (
@@ -57,37 +70,47 @@ function Board({ cards, onFlip, flipped1, flipped2 }) {
           onFlip={onFlip}
           flipped1={flipped1}
           flipped2={flipped2}
+          foundNums={foundNums}
         />
       ))}
     </ul>
   );
 }
 
-function Card({ card, onFlip, flipped1, flipped2 }) {
+function Card({ card, onFlip, flipped1, flipped2, foundNums }) {
   const isFlipped = flipped1?.id === card.id || flipped2?.id === card.id;
-
+  const isFound = foundNums.includes(card.number);
   return (
     <li>
       <button
-        className={`card ${isFlipped ? 'flipped' : ''}`}
+        className={`card ${isFlipped || isFound ? 'flipped' : ''}`}
         onClick={() => onFlip(card)}
+        disabled={isFound}
       >
-        {isFlipped && <p>{card.number}</p>}
+        {(isFlipped || isFound) && <p>{card.number}</p>}
       </button>
     </li>
   );
 }
 
-function Score({ score }) {
+function Score({ score, youWin, onWin }) {
   return (
-    <div className="score">
-      <p>Score: {score}</p>
-    </div>
+    <>
+      {youWin && (
+        <>
+          <h2>You won!!!!</h2>
+          <Button onClick={onWin}>Play Again</Button>{' '}
+        </>
+      )}
+      <div className="score">
+        <p>Score: {score}</p>
+      </div>
+    </>
   );
 }
 
-function Submit({ onSubmit }) {
-  return <button onClick={onSubmit}>Submit</button>;
+function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
 }
 
 export default App;
